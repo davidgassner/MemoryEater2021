@@ -12,7 +12,7 @@ class MainViewModel : ViewModel() {
     private val data = mutableListOf<String>()
 
     // live data object to report current data usage
-    val memoryMessage = MutableLiveData<String>()
+    val report = MutableLiveData<String>()
     private var isCoroutineRunning = false
 
     fun eatMemory() {
@@ -53,7 +53,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun reportDataSize() {
-        memoryMessage.postValue("Number of items: ${data.size}")
+        report.postValue("Number of items: ${data.size}")
     }
 
 }

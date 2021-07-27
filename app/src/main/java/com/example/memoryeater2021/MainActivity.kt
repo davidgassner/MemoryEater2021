@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java).also {
-            it.memoryMessage.observe(this, { message ->
+            it.report.observe(this, { message ->
                 binding.tvOut.text = message
             })
         }
