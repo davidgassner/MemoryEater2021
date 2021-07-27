@@ -1,77 +1,37 @@
 package com.example.memoryeater2021
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.memoryeater2021.databinding.ActivityMainBinding
-import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
-    private val mData = mutableListOf<String>()
-    private var job = Job()
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
-            it.eatButton.setOnClickListener { eatMemory() }
-            it.releaseButton.setOnClickListener { releaseMemory() }
+            it.eatButton.setOnClickListener {
+                viewModel.eatMemory()
+            }
+            it.releaseButton.setOnClickListener {
+                viewModel.releaseMemory()
+            }
         }
 
-        updateDisplay()
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java).also {
+            it.memoryMessage.observe(this, { message ->
+                binding.tvOut.text = message
+            })
+        }
+
     }
 
     override fun onDestroy() {
-        try {
-            job.cancel()
-        } catch (ignore: UninitializedPropertyAccessException) {
-        }
         super.onDestroy()
+        viewModel.releaseMemory()
     }
 
-    private fun eatMemory() {
-
-        // If the current job has already been used, create a new one.
-        if (job.isCompleted) {
-            job = Job()
-        }
-        // Create the coroutine scope and launch the code.
-        CoroutineScope(job + Dispatchers.Default).launch {
-
-            for (i in 1..1000) {
-
-                // Add 10,000 items to the collection
-                for (j in 1..10000) {
-                    mData.add("Item $i:$j")
-                }
-                delay(500)
-
-                // Update the display while in the Main (UI) thread
-                withContext(Dispatchers.Main) {
-                    updateDisplay()
-                }
-
-                // Exit this coroutine if the user has quit the app
-                if (job.isCancelled) {
-                    println("Leaving the coroutine")
-                    break
-                }
-
-            }
-        }
-    }
-
-    private fun releaseMemory() {
-        try {
-            job.cancel()
-        } catch (e: UninitializedPropertyAccessException) {
-        }
-        mData.clear()
-        updateDisplay()
-    }
-
-    private fun updateDisplay() {
-        val report = "${getString(R.string.report_label)}: ${mData.size}"
-        binding.tvOut.text = report
-    }
 }
