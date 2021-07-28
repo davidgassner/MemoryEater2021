@@ -15,6 +15,9 @@ class MainViewModel : ViewModel() {
     val report = MutableLiveData<String>()
     private var isCoroutineRunning = false
 
+    /**
+     * Add items to the data collection to chew up available system memory
+     */
     fun eatMemory() {
 
         isCoroutineRunning = true
@@ -46,12 +49,18 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Clear the data collection and break the coroutine's loop
+     */
     fun releaseMemory() {
         isCoroutineRunning = false
         data.clear()
         reportDataSize()
     }
 
+    /**
+     * Post a new message to the live data object that the main activity is observing
+     */
     private fun reportDataSize() {
         report.postValue("Number of items: ${data.size}")
     }
