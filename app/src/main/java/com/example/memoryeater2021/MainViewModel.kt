@@ -1,6 +1,5 @@
 package com.example.memoryeater2021
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -43,16 +42,21 @@ class MainViewModel : ViewModel() {
 
                 // Update the display while in the Main (UI) thread
                 reportDataSize()
-                Log.d(TAG, "view model running")
 
-                // Exit this coroutine if the coroutine is cancelled
+                // Exit this coroutine if memory has been released
                 if (!isCoroutineRunning) {
-                    println("Leaving the coroutine")
                     break
                 }
 
             }
         }
+    }
+
+    /**
+     * Post a new message to the live data object that the main activity is observing
+     */
+    private fun reportDataSize() {
+        report.postValue("Number of items: ${data.size}")
     }
 
     /**
@@ -62,13 +66,6 @@ class MainViewModel : ViewModel() {
         isCoroutineRunning = false
         data.clear()
         reportDataSize()
-    }
-
-    /**
-     * Post a new message to the live data object that the main activity is observing
-     */
-    private fun reportDataSize() {
-        report.postValue("Number of items: ${data.size}")
     }
 
 }

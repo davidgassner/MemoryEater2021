@@ -11,6 +11,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        title = getString(R.string.app_name)
+
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
             it.eatButton.setOnClickListener {
