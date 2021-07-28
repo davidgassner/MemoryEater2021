@@ -33,11 +33,11 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/faceImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:contentDescription="@string/memory_eater"
-        android:src="@drawable/ic_face"
+        android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
