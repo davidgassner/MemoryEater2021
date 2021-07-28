@@ -14,6 +14,8 @@ class MainViewModel : ViewModel() {
 
     // live data object to report current data usage
     val report = MutableLiveData<String>()
+
+    // flag to manage infinite loop in eatMemory()
     private var isCoroutineRunning = false
 
     /**
@@ -40,7 +42,7 @@ class MainViewModel : ViewModel() {
                 }
                 delay(500)
 
-                // Update the display while in the Main (UI) thread
+                // Update the display
                 reportDataSize()
 
                 // Exit this coroutine if memory has been released
